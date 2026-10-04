@@ -123,9 +123,11 @@ def add_task(task: Task, path: str) -> None:
 
 def update_task(task: Task, path: str) -> None:
     """
-    Loads current data, finds task by id, replaces in-place, saves.
+    Validates the task, loads current data, finds task by id, replaces in-place, saves.
+    Raises ValueError on validation failure.
     Raises KeyError if the id is not found.
     """
+    _validate_task(task)
     tasks, settings = load_data(path)
     for i, t in enumerate(tasks):
         if t.id == task.id:

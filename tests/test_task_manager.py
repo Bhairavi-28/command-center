@@ -94,6 +94,40 @@ def test_add_task_invalid_effort(tmp_path):
         add_task(task, path)
 
 
+def test_update_task_invalid_name(tmp_path):
+    path = str(tmp_path / "tasks.json")
+    task = _make_task(name="Valid Name")
+    add_task(task, path)
+    invalid = Task(
+        id=task.id,
+        name="",
+        course=task.course,
+        deadline=task.deadline,
+        estimated_effort_hours=task.estimated_effort_hours,
+        priority=task.priority,
+        description=task.description,
+    )
+    with pytest.raises(ValueError, match="Task name is required"):
+        update_task(invalid, path)
+
+
+def test_update_task_invalid_effort(tmp_path):
+    path = str(tmp_path / "tasks.json")
+    task = _make_task(name="Valid Name")
+    add_task(task, path)
+    invalid = Task(
+        id=task.id,
+        name=task.name,
+        course=task.course,
+        deadline=task.deadline,
+        estimated_effort_hours=0.0,
+        priority=task.priority,
+        description=task.description,
+    )
+    with pytest.raises(ValueError, match="Effort must be > 0"):
+        update_task(invalid, path)
+
+
 def test_missing_file_returns_empty(tmp_path):
     path = str(tmp_path / "nonexistent.json")
     tasks, settings = load_data(path)
