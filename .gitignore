@@ -1,0 +1,7 @@
+tasks.json
+data/
+__pycache__/
+.env
+*.pyc
+.pytest_cache/
+*.tmp

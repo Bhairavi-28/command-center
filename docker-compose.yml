@@ -1,0 +1,11 @@
+services:
+  command-center:
+    build: .
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - TASKS_FILE=/app/data/tasks.json
+      # Uncomment the line below and set your key to enable AI features
+      # - OPENAI_API_KEY=sk-...
