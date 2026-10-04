@@ -32,7 +32,7 @@ The application is fully functional without an AI API key. AI features (natural-
 ## Quick Start
 
 ```bash
-git clone https://github.com/your-username/command-center.git
+git clone https://github.com/Bhairavi-28/command-center.git
 cd command-center
 pip install -r requirements.txt
 streamlit run app.py
