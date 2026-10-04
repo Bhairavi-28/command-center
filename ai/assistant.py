@@ -18,19 +18,31 @@ from core.workload import WorkloadMetrics
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
-# Import guard — must appear before any other openai usage
+# Import guard — lazy, so pytest collection never triggers a hanging import.
+# The first call to ai_available() or _get_client() loads the module once.
 # ---------------------------------------------------------------------------
-try:
-    import openai as _openai  # type: ignore[import]
-    _OPENAI_AVAILABLE = True
-except ImportError:
-    _openai = None  # type: ignore[assignment]
-    _OPENAI_AVAILABLE = False
+_openai = None  # type: ignore[assignment]
+_OPENAI_AVAILABLE: bool | None = None  # None = not yet attempted
+
+
+def _try_import_openai() -> None:
+    """Attempt to import openai exactly once. Sets module-level globals."""
+    global _openai, _OPENAI_AVAILABLE  # noqa: PLW0603
+    if _OPENAI_AVAILABLE is not None:
+        return  # already attempted
+    try:
+        import openai as _oi  # type: ignore[import]
+        _openai = _oi
+        _OPENAI_AVAILABLE = True
+    except Exception:  # noqa: BLE001 — broad: survive broken/incompatible installs
+        _openai = None
+        _OPENAI_AVAILABLE = False
 
 
 def ai_available() -> bool:
     """Returns True only when openai is importable AND OPENAI_API_KEY is set."""
-    return _OPENAI_AVAILABLE and bool(os.environ.get("OPENAI_API_KEY"))
+    _try_import_openai()
+    return bool(_OPENAI_AVAILABLE) and bool(os.environ.get("OPENAI_API_KEY"))
 
 
 def _get_client():

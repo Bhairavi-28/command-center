@@ -1,36 +1,35 @@
-# Task data — user-specific, must not be committed
+# Version control
+.git/
+.gitignore
+
+# Workflow pipeline artifacts
+.agents/
+
+# Local task data — persisted via volume mount at runtime
 tasks.json
 data/
 
-# Workflow pipeline artifacts (Kiro agent outputs)
-.agents/
-
-# Python
+# Python caches
 __pycache__/
 *.pyc
 *.pyo
-*.pyd
 *.egg-info/
 dist/
 build/
-*.egg
-.eggs/
 
 # Virtual environments
 venv/
 .venv/
 env/
-.env/
 
 # Environment / secrets
 .env
 *.env
 
-# Test / coverage artifacts
+# Test artifacts
 .pytest_cache/
 .coverage
 htmlcov/
-*.txt
 
 # Editor / OS
 .DS_Store
@@ -38,3 +37,9 @@ Thumbs.db
 *.tmp
 .idea/
 .vscode/
+
+# CI
+.github/
+
+# Docs
+README.md
